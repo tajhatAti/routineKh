@@ -407,6 +407,7 @@ body::before {
   50%     { box-shadow: 0 12px 36px hsl(270 95% 65% / 0.55), 0 0 0 14px hsl(187 100% 55% / 0); }
 }
 
+[hidden] { display: none !important; }
 .gpa-modal {
   position: fixed; inset: 0; background: hsl(222 60% 2% / 0.75);
   backdrop-filter: blur(10px); display: grid; place-items: center;
@@ -463,4 +464,4 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
    }
-     
+   
