@@ -10,27 +10,27 @@ const DAY_FULL_BN = ["রবিবার", "সোমবার", "মঙ্গ�
 
 const ROUTINE = {
   0: [ // রবিবার
-    { subject: "পদার্থ বিজ্ঞান-২", startTime: "09:30", endTime: "10:15", room: "R-201", type: "theory" },
-    { subject: "জীব বিজ্ঞান-২",   startTime: "10:15", endTime: "11:00", room: "R-202", type: "theory" },
-    { subject: "রসায়ন-২",         startTime: "11:00", endTime: "11:45", room: "R-203", type: "theory" },
-    { subject: "ভূমি আর্দ্রতা সংরক্ষণ ও উৎপাদন প্রযুক্তি-২", startTime: "12:00", endTime: "12:45", room: "R-301", type: "theory" },
+    { subject: "পদার্থ বিজ্ঞান-২", startTime: "10:20", endTime: "11:05", room: "R-110", type: "theory" },
+    { subject: "জীব বিজ্ঞান-২",   startTime: "11:10", endTime: "11:55", room: "R-110", type: "theory" },
+    { subject: "রসায়ন-২",         startTime: "12:00", endTime: "12:45", room: "R-110", type: "theory" },
+    { subject: "কৃষি তাত্ত্বিক ফসলের উৎপাদন প্রযুক্তি-১", startTime: "12:50", endTime: "01:35", room: "R-110", type: "theory" },
   ],
   1: [ // সোমবার
-    { subject: "হিসাববিজ্ঞান",     startTime: "09:30", endTime: "10:15", room: "R-105", type: "theory" },
-    { subject: "পদার্থ বিজ্ঞান-২", startTime: "10:15", endTime: "11:00", room: "R-201", type: "theory" },
-    { subject: "বাংলা-২",          startTime: "11:00", endTime: "11:45", room: "R-110", type: "theory" },
-    { subject: "রসায়ন-২",         startTime: "12:00", endTime: "12:45", room: "R-203", type: "theory" },
+    { subject: "ইংরেজি-২",     startTime: "10:20", endTime: "11:05", room: "R-110", type: "theory" },
+    { subject: "পদার্থ বিজ্ঞান-২", startTime: "11:10", endTime: "11:55", room: "R-110", type: "theory" },
+    { subject: "বাংলা-২",          startTime: "12:00", endTime: "12:45", room: "R-110", type: "theory" },
+    { subject: "রসায়ন-২",         startTime: "12:50", endTime: "01:35", room: "R-110", type: "theory" },
   ],
   2: [ // মঙ্গলবার
-    { subject: "কম্পিউটার অ্যাপ্লিকেশন",      startTime: "11:00", endTime: "11:45", room: "Lab-1", type: "theory" },
-    { subject: "ভূমি আর্দ্রতা সংরক্ষণ (ব্যব)", startTime: "11:45", endTime: "12:30", room: "Lab-3", type: "practical" },
-    { subject: "জীব বিজ্ঞান-২ (ব্যব)",          startTime: "12:30", endTime: "13:15", room: "Lab-2", type: "practical" },
-    { subject: "রসায়ন (ব্যব)",                  startTime: "13:15", endTime: "14:00", room: "Lab-4", type: "practical" },
+    { subject: "কম্পিউটার অ্যাপ্লিকেশন",      startTime: "9:30", endTime: "10:15", room: "R-110", type: "practical" },
+    { subject: "ভূমি আর্দ্রতা সংরক্ষণ (ব্যব)", startTime: "10:20", endTime: "11:05", room: "R-110", type: "practical" },
+    { subject: "জীব বিজ্ঞান-২ (ব্যব)",          startTime: "11:10", endTime: "11:55", room: "R-110", type: "practical" },
+    { subject: "রসায়ন (ব্যব)",                  startTime: "12:50", endTime: "1:35", room: "R-110", type: "practical" },
   ],
   3: [ // বুধবার
-    { subject: "বাংলা-২",                 startTime: "09:30", endTime: "10:15", room: "R-110", type: "theory" },
-    { subject: "পদার্থ বিজ্ঞান-২ (ব্যব)", startTime: "10:15", endTime: "11:00", room: "Lab-5", type: "practical" },
-    { subject: "ইংরেজি",                  startTime: "11:00", endTime: "11:45", room: "R-112", type: "theory" },
+    { subject: "বাংলা-২",                 startTime: "10:20", endTime: "11:05", room: "R-110", type: "theory" },
+    { subject: "পদার্থ বিজ্ঞান-২ (ব্যব)", startTime: "11:10", endTime: "11:55", room: "R-110", type: "practical" },
+    { subject: "ইংরেজি",                  startTime: "12:00", endTime: "12:45", room: "R-110", type: "theory" },
   ],
   4: [], // বৃহস্পতিবার — fill in when available
   5: [], // শুক্রবার — weekend
