@@ -13,19 +13,19 @@ const ROUTINE = {
     { subject: "পদার্থ বিজ্ঞান-২", startTime: "10:20", endTime: "11:05", room: "R-110", type: "theory" },
     { subject: "জীব বিজ্ঞান-২",   startTime: "11:10", endTime: "11:55", room: "R-110", type: "theory" },
     { subject: "রসায়ন-২",         startTime: "12:00", endTime: "12:45", room: "R-110", type: "theory" },
-    { subject: "কৃষি তাত্ত্বিক ফসলের উৎপাদন প্রযুক্তি-১", startTime: "12:50", endTime: "01:35", room: "R-110", type: "theory" },
+    { subject: "কৃষি তাত্ত্বিক ফসলের উৎপাদন প্রযুক্তি-১", startTime: "12:50", endTime: "13:35", room: "R-110", type: "theory" },
   ],
   1: [ // সোমবার
-    { subject: "ইংরেজি-২",     startTime: "10:20", endTime: "11:05", room: "R-110", type: "theory" },
+    { subject: "ইংরেজি-২",         startTime: "10:20", endTime: "11:05", room: "R-110", type: "theory" },
     { subject: "পদার্থ বিজ্ঞান-২", startTime: "11:10", endTime: "11:55", room: "R-110", type: "theory" },
     { subject: "বাংলা-২",          startTime: "12:00", endTime: "12:45", room: "R-110", type: "theory" },
-    { subject: "রসায়ন-২",         startTime: "12:50", endTime: "01:35", room: "R-110", type: "theory" },
+    { subject: "রসায়ন-২",         startTime: "12:50", endTime: "13:35", room: "R-110", type: "theory" },
   ],
   2: [ // মঙ্গলবার
-    { subject: "কম্পিউটার অ্যাপ্লিকেশন",      startTime: "9:30", endTime: "10:15", room: "R-110", type: "practical" },
+    { subject: "কম্পিউটার অ্যাপ্লিকেশন",       startTime: "09:30", endTime: "10:15", room: "R-110", type: "practical" },
     { subject: "ভূমি আর্দ্রতা সংরক্ষণ (ব্যব)", startTime: "10:20", endTime: "11:05", room: "R-110", type: "practical" },
-    { subject: "জীব বিজ্ঞান-২ (ব্যব)",          startTime: "11:10", endTime: "11:55", room: "R-110", type: "practical" },
-    { subject: "রসায়ন (ব্যব)",                  startTime: "12:50", endTime: "1:35", room: "R-110", type: "practical" },
+    { subject: "জীব বিজ্ঞান-২ (ব্যব)",         startTime: "11:10", endTime: "11:55", room: "R-110", type: "practical" },
+    { subject: "রসায়ন (ব্যব)",                 startTime: "12:50", endTime: "13:35", room: "R-110", type: "practical" },
   ],
   3: [ // বুধবার
     { subject: "বাংলা-২",                 startTime: "10:20", endTime: "11:05", room: "R-110", type: "theory" },
@@ -99,7 +99,10 @@ function getDynamicState(now = new Date()) {
 /* -------------------- 4. RENDER: Hero + Priority -------------------- */
 function renderHeroAndPriority(state) {
   const d = state.now;
-  $("#clock").textContent = `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}:${fmt2(d.getSeconds())}`;
+  let h = d.getHours();
+  const ampm = h >= 12 ? "PM" : "AM";
+  h = h % 12 || 12;
+  $("#clock").textContent = `${fmt2(h)}:${fmt2(d.getMinutes())}:${fmt2(d.getSeconds())} ${ampm}`;
   $("#dateLine").textContent = `${DAY_FULL_BN[d.getDay()]} · ${d.toLocaleDateString("bn-BD", { day: "numeric", month: "long", year: "numeric" })}`;
 
   const card = $("#priorityCard");
