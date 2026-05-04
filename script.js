@@ -1,7 +1,9 @@
 /* =========================================================
    Smart Agriculture Student Portal — Vanilla JS
-   Modular logic with JSON-based state management.
-   Edit ROUTINE below to change your class schedule.
+   - Smart Focus Mode (time-aware Bengali messages)
+   - Live class progress bar
+   - Read-only assignments (loaded from assignments.json)
+   - GPA calculator
    ========================================================= */
 
 /* -------------------- 1. DATA: Class Routine -------------------- */
@@ -32,9 +34,9 @@ const ROUTINE = {
     { subject: "পদার্থ বিজ্ঞান-২ (ব্যব)", startTime: "11:10", endTime: "11:55", room: "R-110", type: "practical" },
     { subject: "ইংরেজি",                  startTime: "12:00", endTime: "12:45", room: "R-110", type: "theory" },
   ],
-  4: [], // বৃহস্পতিবার — fill in when available
-  5: [], // শুক্রবার — weekend
-  6: [], // শনিবার — weekend
+  4: [], // বৃহস্পতিবার — ছুটি
+  5: [], // শুক্রবার — ছুটি
+  6: [], // শনিবার — ছুটি
 };
 
 /* -------------------- 2. UTILITIES -------------------- */
@@ -65,38 +67,189 @@ function getDynamicState(now = new Date()) {
   const dayIndex = now.getDay();
   const todayClasses = ROUTINE[dayIndex] || [];
   const cur = nowMin(now);
-  const isWeekend = dayIndex === 5 || dayIndex === 6;
+  // Weekend per user spec: Thu(4), Fri(5), Sat(6)
+  const isWeekend = dayIndex === 4 || dayIndex === 5 || dayIndex === 6;
 
-  let activeClass = null, activeProgress = 0, nextClass = null, minutesToNext = null;
+  let activeClass = null, activeProgress = 0, activeStart = 0, activeEnd = 0;
+  let nextClass = null, minutesToNext = null;
+  let prevClass = null;
 
   for (const c of todayClasses) {
     const s = toMin(c.startTime), e = toMin(c.endTime);
-    if (cur >= s && cur < e) { activeClass = c; activeProgress = (cur - s) / (e - s); break; }
+    if (cur >= s && cur < e) {
+      activeClass = c; activeProgress = (cur - s) / (e - s);
+      activeStart = s; activeEnd = e; break;
+    }
   }
   if (!activeClass) {
     for (const c of todayClasses) {
       const s = toMin(c.startTime);
       if (s > cur) { nextClass = c; minutesToNext = s - cur; break; }
+      prevClass = c;
     }
   }
   const lastEnd = todayClasses.length ? todayClasses[todayClasses.length - 1].endTime : null;
   const afterHours = lastEnd != null && cur >= toMin(lastEnd);
+  const beforeFirst = todayClasses.length && cur < toMin(todayClasses[0].startTime);
 
   let mode;
   if (isWeekend) mode = "weekend";
   else if (activeClass) mode = "active-class";
+  else if (beforeFirst) mode = "before-classes";
   else if (afterHours || todayClasses.length === 0) mode = "after-hours";
-  else mode = "before-classes";
+  else mode = "between-classes";
 
   const upcomingDayIndex = (mode === "after-hours" || mode === "weekend")
     ? nextDayWithClasses(dayIndex) : dayIndex;
 
-  return { now, dayIndex, isWeekend, todayClasses, activeClass, activeProgress,
-           nextClass, minutesToNext, lastEnd, mode, upcomingDayIndex,
+  return { now, dayIndex, isWeekend, todayClasses,
+           activeClass, activeProgress, activeStart, activeEnd,
+           nextClass, minutesToNext, prevClass,
+           lastEnd, mode, upcomingDayIndex,
            upcomingClasses: ROUTINE[upcomingDayIndex] || [] };
 }
 
-/* -------------------- 4. RENDER: Hero + Priority -------------------- */
+/* -------------------- 4. SMART FOCUS MODE (AI-like messages) -------------------- */
+function getFocusContext(state) {
+  const d = state.now;
+  const hour = d.getHours();
+  const cur = nowMin(d);
+
+  // 1) Active class — highest priority
+  if (state.mode === "active-class") {
+    const remaining = Math.max(0, Math.round(state.activeEnd - cur));
+    const elapsed   = Math.max(0, Math.round(cur - state.activeStart));
+    return {
+      icon: "🔴",
+      tag: "ক্লাস চলছে",
+      message: `${state.activeClass.subject} ক্লাস চলছে`,
+      sub: `📍 ${state.activeClass.room || ""} · শেষ হবে ${state.activeClass.endTime}-এ`,
+      progress: {
+        label: `${elapsed} মিনিট পার · ${remaining} মিনিট বাকি`,
+        pct: Math.round(state.activeProgress * 100),
+        time: `${state.activeClass.startTime} → ${state.activeClass.endTime}`,
+      },
+      pulse: true,
+    };
+  }
+
+  // 2) Weekend (Thu/Fri/Sat)
+  if (state.mode === "weekend") {
+    return {
+      icon: "🌴",
+      tag: "ছুটির দিন",
+      message: "আজ ছুটি 🌴",
+      sub: `বিশ্রাম নাও এবং পেন্ডিং অ্যাসাইনমেন্ট শেষ করো · পরবর্তী ক্লাস: ${DAY_FULL_BN[state.upcomingDayIndex]}`,
+    };
+  }
+
+  // 3) Between classes (break)
+  if (state.mode === "between-classes" && state.nextClass) {
+    return {
+      icon: "☕",
+      tag: "বিরতি",
+      message: `বিরতি চলছে ☕`,
+      sub: `${fmtCountdown(state.minutesToNext)} পরে ${state.nextClass.subject} ক্লাস শুরু হবে`,
+    };
+  }
+
+  // 4) Before first class
+  if (state.mode === "before-classes" && state.nextClass) {
+    return {
+      icon: "⏰",
+      tag: "ক্লাস শুরুর আগে",
+      message: `ক্লাস শুরুর আগে ⏰`,
+      sub: `ব্যাগ গুছিয়ে নাও · ${fmtCountdown(state.minutesToNext)} বাকি (${state.nextClass.subject})`,
+    };
+  }
+
+  // 5) After classes — time-of-day based
+  // Early morning 4–7 AM
+  if (hour >= 4 && hour < 7) {
+    return {
+      icon: "🌅",
+      tag: "ভোর",
+      message: "ভোর হয়েছে 🌅",
+      sub: "ফজরের পরে পড়লে বেশি মনে থাকে — মূল টপিকগুলো এখন রিভিশন করো",
+    };
+  }
+  // Late night 10 PM – 12 AM
+  if (hour >= 22 && hour < 24) {
+    return {
+      icon: "😴",
+      tag: "বেশি রাত",
+      message: "বেশি রাত হয়েছে 😴",
+      sub: "ঘুমানোর সময় — সকালে উঠে পড়াশোনা করলে ভালো ফল পাবে",
+    };
+  }
+  // Deep night 12 AM – 4 AM
+  if (hour >= 0 && hour < 4) {
+    return {
+      icon: "🌙",
+      tag: "গভীর রাত",
+      message: "অনেক রাত হয়ে গেছে 🌙",
+      sub: "এখনই ঘুমিয়ে পড়ো — শরীরের বিশ্রাম দরকার",
+    };
+  }
+  // Night 7–10 PM
+  if (hour >= 19 && hour < 22) {
+    return {
+      icon: "🌙",
+      tag: "রাত",
+      message: "রাত হয়েছে 🌙",
+      sub: "গুরুত্বপূর্ণ টপিক রিভিশন করো — আগামীকালের ক্লাসের প্রস্তুতি নাও",
+    };
+  }
+  // Evening 4–7 PM
+  if (hour >= 16 && hour < 19) {
+    return {
+      icon: "📚",
+      tag: "সন্ধ্যা",
+      message: "সন্ধ্যা হয়েছে 📚",
+      sub: "পড়াশোনার সময় — অ্যাসাইনমেন্ট কমপ্লিট করো",
+    };
+  }
+  // After last class 1 PM – 4 PM (relax)
+  if (hour >= 13 && hour < 16) {
+    return {
+      icon: "🎮",
+      tag: "রিল্যাক্স",
+      message: "ক্লাস শেষ! 🎮",
+      sub: "খেলার সময় বা রিল্যাক্স করো — মনটাকে একটু বিশ্রাম দাও",
+    };
+  }
+  // Morning 7 AM – first class (fallback if no class today)
+  return {
+    icon: "☀️",
+    tag: "সকাল",
+    message: "শুভ সকাল ☀️",
+    sub: "নতুন দিন — পড়াশোনার জন্য নিজেকে প্রস্তুত করো",
+  };
+}
+
+function renderFocus(state) {
+  const ctx = getFocusContext(state);
+  const card = $("#focusCard");
+  $("#focusIcon").textContent = ctx.icon;
+  $("#focusTag").textContent = ctx.tag;
+  $("#focusMessage").textContent = ctx.message;
+  $("#focusSub").textContent = ctx.sub || "";
+
+  card.classList.toggle("pulse", !!ctx.pulse);
+
+  const wrap = $("#focusProgressWrap");
+  if (ctx.progress) {
+    wrap.hidden = false;
+    $("#focusProgressLabel").textContent = ctx.progress.label;
+    $("#focusProgressPct").textContent = `${ctx.progress.pct}%`;
+    $("#focusProgressBar").style.width = `${ctx.progress.pct}%`;
+    $("#focusProgressTime").textContent = ctx.progress.time;
+  } else {
+    wrap.hidden = true;
+  }
+}
+
+/* -------------------- 5. RENDER: Hero + Priority -------------------- */
 function renderHeroAndPriority(state) {
   const d = state.now;
   let h = d.getHours();
@@ -125,6 +278,11 @@ function renderHeroAndPriority(state) {
     meta = `${state.nextClass.startTime} – ${state.nextClass.endTime} · ${state.nextClass.room || ""}`;
     status = `শুরু হবে ${fmtCountdown(state.minutesToNext)} পরে`;
     $("#priorityCountdown").textContent = fmtCountdown(state.minutesToNext);
+  } else if (state.mode === "between-classes" && state.nextClass) {
+    badge = "☕ বিরতি"; subject = state.nextClass.subject;
+    meta = `${state.nextClass.startTime} – ${state.nextClass.endTime} · ${state.nextClass.room || ""}`;
+    status = `${fmtCountdown(state.minutesToNext)} পরে শুরু`;
+    $("#priorityCountdown").textContent = fmtCountdown(state.minutesToNext);
   } else if (state.mode === "after-hours") {
     badge = "🌙 আজকের ক্লাস শেষ"; subject = "আগামীকালের প্রস্তুতি";
     meta = `পরবর্তী দিন: ${DAY_FULL_BN[state.upcomingDayIndex]} · ${state.upcomingClasses.length} টি ক্লাস`;
@@ -136,10 +294,12 @@ function renderHeroAndPriority(state) {
   $("#priorityMeta").textContent = meta;
   $("#priorityProgress").style.width = `${progress}%`;
   $("#statusLine").textContent = status;
-  if (state.mode !== "before-classes") $("#priorityCountdown").textContent = "";
+  if (state.mode !== "before-classes" && state.mode !== "between-classes") {
+    $("#priorityCountdown").textContent = "";
+  }
 }
 
-/* -------------------- 5. RENDER: Schedule -------------------- */
+/* -------------------- 6. RENDER: Schedule -------------------- */
 let currentView = "today";
 function renderSchedule(state) {
   const body = $("#scheduleBody");
@@ -185,24 +345,22 @@ $$(".tab").forEach(btn => btn.addEventListener("click", () => {
   renderSchedule(getDynamicState());
 }));
 
-/* -------------------- 6. ASSIGNMENTS (localStorage) -------------------- */
-const STORE_KEY = "sasp.assignments.v1";
+/* -------------------- 7. ASSIGNMENTS (READ-ONLY from JSON) -------------------- */
+let assignments = [];
 
-function loadAssignments() {
-  try { const raw = localStorage.getItem(STORE_KEY); if (raw) return JSON.parse(raw); } catch {}
-  const today = new Date();
-  const inDays = (d) => { const x = new Date(today); x.setDate(x.getDate() + d); x.setHours(23,59,0,0); return x.toISOString(); };
-  const seed = [
-    { id: crypto.randomUUID(), title: "ল্যাব রিপোর্ট: রসায়ন-২",   subject: "রসায়ন-২",            dueDate: inDays(1), done: false },
-    { id: crypto.randomUUID(), title: "অ্যাসাইনমেন্ট: ভূমি আর্দ্রতা", subject: "ভূমি আর্দ্রতা সংরক্ষণ", dueDate: inDays(3), done: false },
-    { id: crypto.randomUUID(), title: "প্রেজেন্টেশন: জীব বিজ্ঞান-২", subject: "জীব বিজ্ঞান-২",       dueDate: inDays(7), done: false },
-  ];
-  localStorage.setItem(STORE_KEY, JSON.stringify(seed));
-  return seed;
+async function loadAssignments() {
+  try {
+    const res = await fetch(`assignments.json?t=${Date.now()}`, { cache: "no-store" });
+    if (res.ok) {
+      const data = await res.json();
+      assignments = Array.isArray(data) ? data : (data.assignments || []);
+    }
+  } catch (e) {
+    console.warn("Failed to load assignments.json", e);
+    assignments = [];
+  }
+  renderAssignments();
 }
-function saveAssignments(items) { localStorage.setItem(STORE_KEY, JSON.stringify(items)); }
-
-let assignments = loadAssignments();
 
 function hoursLeft(due) { return (new Date(due).getTime() - Date.now()) / 36e5; }
 function daysLeft(due)  { return Math.ceil(hoursLeft(due) / 24); }
@@ -210,7 +368,7 @@ function daysLeft(due)  { return Math.ceil(hoursLeft(due) / 24); }
 function renderAssignments() {
   const list = $("#assignList");
   const sorted = [...assignments].sort((a, b) => {
-    if (a.done !== b.done) return a.done ? 1 : -1;
+    if (!!a.done !== !!b.done) return a.done ? 1 : -1;
     return new Date(a.dueDate) - new Date(b.dueDate);
   });
   if (!sorted.length) { list.innerHTML = `<li class="empty-day bn">কোনো অ্যাসাইনমেন্ট নেই 🎉</li>`; return; }
@@ -219,46 +377,18 @@ function renderAssignments() {
     const urgent = !a.done && h <= 48 && h > 0;
     const dl = daysLeft(a.dueDate);
     const dueText = a.done ? "সম্পন্ন" : (h <= 0 ? "মেয়াদোত্তীর্ণ" : (dl <= 1 ? `${Math.max(0, Math.round(h))} ঘণ্টা` : `${dl} দিন`));
-    return `<li class="assign-item ${a.done ? "done" : ""} ${urgent ? "urgent" : ""}" data-id="${a.id}">
-      <button class="assign-check" data-action="toggle">${a.done ? "✓" : ""}</button>
+    return `<li class="assign-item ${a.done ? "done" : ""} ${urgent ? "urgent" : ""}">
+      <span class="assign-check ro">${a.done ? "✓" : ""}</span>
       <div>
         <div class="assign-title bn">${a.title}</div>
         <div class="assign-sub bn">${a.subject}</div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-        <span class="assign-due bn">${dueText}</span>
-        <button class="assign-del" data-action="del" title="মুছুন">✕</button>
-      </div>
+      <span class="assign-due bn">${dueText}</span>
     </li>`;
   }).join("");
 }
 
-$("#assignList").addEventListener("click", (e) => {
-  const btn = e.target.closest("[data-action]"); if (!btn) return;
-  const id = btn.closest(".assign-item").dataset.id;
-  if (btn.dataset.action === "toggle") {
-    assignments = assignments.map(a => a.id === id ? { ...a, done: !a.done } : a);
-  } else if (btn.dataset.action === "del") {
-    assignments = assignments.filter(a => a.id !== id);
-  }
-  saveAssignments(assignments); renderAssignments();
-});
-
-$("#addBtn").addEventListener("click", () => $("#addForm").hidden = !$("#addForm").hidden);
-$("#cancelAdd").addEventListener("click", () => $("#addForm").hidden = true);
-$("#addForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const title = $("#aTitle").value.trim();
-  const subject = $("#aSubject").value.trim();
-  const due = $("#aDue").value;
-  if (!title || !subject || !due) return;
-  const dueIso = new Date(`${due}T23:59:00`).toISOString();
-  assignments = [{ id: crypto.randomUUID(), title, subject, dueDate: dueIso, done: false }, ...assignments];
-  saveAssignments(assignments); renderAssignments();
-  e.target.reset(); $("#addForm").hidden = true;
-});
-
-/* -------------------- 7. GPA CALCULATOR -------------------- */
+/* -------------------- 8. GPA CALCULATOR -------------------- */
 const GRADE_POINTS = { "A+": 4.0, "A": 3.75, "A-": 3.5, "B+": 3.25, "B": 3.0, "B-": 2.75, "C+": 2.5, "C": 2.25, "D": 2.0, "F": 0 };
 let gpaCourses = [{ name: "", credit: 3, grade: "A" }];
 
@@ -295,14 +425,15 @@ $("#gpaToggle").addEventListener("click", () => { $("#gpaModal").hidden = false;
 $("#gpaClose").addEventListener("click", () => { $("#gpaModal").hidden = true; });
 $("#gpaModal").addEventListener("click", (e) => { if (e.target.id === "gpaModal") $("#gpaModal").hidden = true; });
 
-/* -------------------- 8. MAIN LOOP -------------------- */
+/* -------------------- 9. MAIN LOOP -------------------- */
 function tick() {
   const state = getDynamicState();
   renderHeroAndPriority(state);
+  renderFocus(state);
   renderSchedule(state);
 }
 tick();
-renderAssignments();
+loadAssignments();
 setInterval(tick, 1000);
-// Re-render assignments every minute to update countdowns
 setInterval(renderAssignments, 60000);
+     
