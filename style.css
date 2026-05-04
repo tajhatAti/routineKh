@@ -215,8 +215,8 @@ body::before {
   letter-spacing: 0.08em; opacity: 0.90;
 }
 .clock-label {
-  color: var(--muted); font-size: 11px; margin-top: 4px;
-  font-style: italic; opacity: 0.75;
+  color: var(--yellow); font-size: 18px; margin-top: 4px;
+  font-style: italic; opacity: 0.98;
 }
 
 /* -------------------- Next-day routine preview -------------------- */
