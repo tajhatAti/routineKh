@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin · Smart Agriculture Portal</title>
+  <title></title>· Smart Assignment Portal</title>
   <meta name="robots" content="noindex,nofollow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,23 +21,23 @@
       <div>
         <p class="hero-eyebrow">⚙️ ADMIN PANEL</p>
         <h1 class="hero-title"><span class="aurora">Assignment</span> Manager</h1>
-        <p class="hero-status bn">এখানে অ্যাসাইনমেন্ট যোগ/সম্পাদনা করুন · তারপর JSON কপি করে GitHub-এ <code>docs/assignments.json</code> ফাইলে পেস্ট করুন</p>
+        <p class="hero-status bn </p>
       </div>
       <a href="index.html" class="btn ghost" style="flex:0 0 auto;">← মূল পেজ</a>
     </header>
 
     <!-- LOGIN GATE -->
     <section class="glass" id="loginCard">
-      <h3 style="margin-bottom:14px;">🔒 অ্যাডমিন পাসওয়ার্ড</h3>
+      <h3 style="margin-bottom:14px;"></h3>
       <form id="loginForm" class="add-form" style="margin-bottom:0;">
         <input id="pwInput" type="password" placeholder="পাসওয়ার্ড লিখুন" autocomplete="current-password" required />
         <div class="form-row">
           <button type="submit" class="btn primary">প্রবেশ করুন</button>
         </div>
-        <p id="pwError" class="bn" style="color:hsl(0 84% 70%);font-size:13px;display:none;">ভুল পাসওয়ার্ড</p>
+        <p id="pwError" class="bn" style="color:hsl(0 84% 70%);font-size:13px;display:none;">ভুল পাসওয়ার্ড- তোমার জন্য এইটা না </p>
       </form>
       <p class="bn" style="color:var(--muted);font-size:12px;margin-top:14px;">
-        💡 পাসওয়ার্ড পরিবর্তন করতে <code>admin.js</code> ফাইলের <code>ADMIN_PASSWORD</code> এডিট করুন।
+        
       </p>
     </section>
 
@@ -60,8 +60,8 @@
       <!-- List -->
       <article class="glass" style="margin-bottom:24px;">
         <div class="assign-head">
-          <h3>📋 বর্তমান অ্যাসাইনমেন্ট সমূহ (<span id="count">0</span>)</h3>
-          <button class="btn ghost" id="loadBtn" style="flex:0 0 auto;">↻ রিলোড</button>
+          <h3> (<span id="count">0</span>)</h3>
+          <button class="btn ghost" id="loadBtn" style="flex:0 0 auto;"></button>
         </div>
         <ul id="adminList" class="assign-list"></ul>
       </article>
@@ -69,18 +69,18 @@
       <!-- Export -->
       <article class="glass">
         <div class="assign-head">
-          <h3>💾 JSON এক্সপোর্ট</h3>
-          <button class="btn primary" id="copyBtn" style="flex:0 0 auto;">📋 কপি করুন</button>
+          <h3></h3>
+          <button class="btn primary" id="copyBtn" style="flex:0 0 auto;"></button>
         </div>
         <p class="bn" style="color:var(--muted);font-size:13px;margin-bottom:12px;">
-          নিচের JSON কপি করে GitHub-এ <code>docs/assignments.json</code> ফাইলে পেস্ট ও কমিট করুন। ১-২ মিনিটের মধ্যে মূল সাইটে আপডেট হবে।
+          
         </p>
         <textarea id="jsonOutput" class="json-output mono" readonly></textarea>
-        <p id="copyStatus" class="bn" style="color:var(--success);font-size:13px;margin-top:10px;display:none;">✓ ক্লিপবোর্ডে কপি হয়েছে!</p>
+        <p id="copyStatus" class="bn" style="color:var(--success);font-size:13px;margin-top:10px;display:none;">✓</p>
       </article>
     </section>
 
-    <footer class="foot">Admin Panel · 🔒 শুধুমাত্র অনুমোদিত ব্যবহারের জন্য</footer>
+    <footer class="foot"></footer>
   </main>
 
   <script src="admin.js" defer></script>
