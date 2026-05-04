@@ -212,10 +212,10 @@ function getFocusContext(state) {
   // After last class 1 PM – 4 PM (relax)
   if (hour >= 13 && hour < 16) {
     return {
-      icon: "🎮",
+      icon: "🙂",
       tag: "রিল্যাক্স",
-      message: "ক্লাস শেষ! 🎮",
-      sub: "খেলার সময় বা রিল্যাক্স করো — মনটাকে একটু বিশ্রাম দাও",
+      message: "ক্লাস শেষ! 😄",
+      sub: " রিল্যাক্স করো — মনটাকে একটু বিশ্রাম দাও",
     };
   }
   // Morning 7 AM – first class (fallback if no class today)
@@ -272,7 +272,7 @@ function renderFocus(state) {
 }
 
 /* -------------------- 5. RENDER: Hero + Priority -------------------- */
-const POETIC_WORDS = ["যে", "সময়", "যাইতেছে", "তাহা", "আর", "ফিরিবিনা", "বৎস", "🙂"];
+const POETIC_WORDS = ["যে", "সময়", "যাইতেছে", "তাহা", "আর", "ফিরিবিনা", "বৎস", ":)"];
 let poeticIdx = 0;
 
 function renderPoeticTick() {
@@ -331,7 +331,7 @@ function renderHeroAndPriority(state) {
   } else if (state.mode === "after-hours") {
     badge = "🌙 আজকের ক্লাস শেষ"; subject = "আগামীকালের প্রস্তুতি";
     meta = `পরবর্তী দিন: ${DAY_FULL_BN[state.upcomingDayIndex]} · ${state.upcomingClasses.length} টি ক্লাস`;
-    status = "নোট রিভিউ ও অ্যাসাইনমেন্ট সম্পন্ন করুন।";
+    status = "খ' শাখার জন্য প্রযোজ্য রুটিন ";
   }
 
   $("#priorityBadge").textContent = badge;
