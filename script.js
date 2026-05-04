@@ -25,7 +25,7 @@ const ROUTINE = {
   ],
   2: [ // মঙ্গলবার
     { subject: "কম্পিউটার অ্যাপ্লিকেশন",       startTime: "09:30", endTime: "10:15", room: "R-110", type: "practical" },
-    { subject: "ভূমি আর্দ্রতা সংরক্ষণ (ব্যব)", startTime: "10:20", endTime: "11:05", room: "R-110", type: "practical" },
+    { subject: "কৃষি তাত্ত্বিক (ব্যব)", startTime: "10:20", endTime: "11:05", room: "R-110", type: "practical" },
     { subject: "জীব বিজ্ঞান-২ (ব্যব)",         startTime: "11:10", endTime: "11:55", room: "R-110", type: "practical" },
     { subject: "রসায়ন (ব্যব)",                 startTime: "12:50", endTime: "13:35", room: "R-110", type: "practical" },
   ],
@@ -165,7 +165,7 @@ function getFocusContext(state) {
 
   // 5) After classes — time-of-day based
   // Early morning 4–7 AM
-  if (hour >= 4 && hour < 7) {
+  if (hour >= 13 && hour < 19) {
     return {
       icon: "🌅",
       tag: "ভোর",
@@ -183,7 +183,7 @@ function getFocusContext(state) {
     };
   }
   // Deep night 12 AM – 4 AM
-  if (hour >= 0 && hour < 4) {
+  if (hour >= 19 && hour < 24) {
     return {
       icon: "🌙",
       tag: "গভীর রাত",
@@ -201,11 +201,11 @@ function getFocusContext(state) {
     };
   }
   // Evening 4–7 PM
-  if (hour >= 18 && hour < 20) {
+  if (hour >= 2 && hour < 12) {
     return {
       icon: "📚",
-      tag: "সন্ধ্যা",
-      message: "সন্ধ্যা হয়েছে 📚",
+      tag: "",
+      message: "",
       sub: "পড়তে হবে নকল আর , হবে না ! 🥲",
     };
   }
@@ -220,10 +220,10 @@ function getFocusContext(state) {
   }
   // Morning 7 AM – first class (fallback if no class today)
   return {
-    icon: "☀️",
-    tag: "সকাল",
-    message: "শুভ সকাল ☀️",
-    sub: "নতুন দিন — পড়াশোনার জন্য নিজেকে প্রস্তুত করো",
+    icon: "📈",
+    tag: "পড়",
+    message: "পড়বি না?",
+    sub: "পড়তে হবে ",
   };
 }
 
