@@ -460,8 +460,17 @@ body::before {
   background: linear-gradient(hsl(187 100% 55% / 0.7), hsl(270 95% 65% / 0.7));
 }
 
-/* -------------------- Reduced motion -------------------- */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-   }
-   
+/* -------------------- 🧠 SMART FOCUS MODE CARD -------------------- */
+.focus-card {
+  position: relative;
+  background:
+    radial-gradient(ellipse at top right, hsl(270 95% 65% / 0.18), transparent 60%),
+    radial-gradient(ellipse at bottom left, hsl(187 100% 55% / 0.15), transparent 55%),
+    var(--gradient-glass);
+  border: 1px solid hsl(270 95% 65% / 0.28);
+  box-shadow: var(--shadow-glass), 0 0 40px hsl(270 95% 65% / 0.15) inset;
+}
+.focus-card::after {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit;
+  padding: 1px; background: var(--gradient-aurora);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-grad
