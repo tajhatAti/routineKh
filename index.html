@@ -32,8 +32,11 @@
         <p class="hero-status" id="statusLine">লোড হচ্ছে…</p>
       </div>
       <div class="hero-right">
-        <div class="clock" id="clock">--:--:--</div>
-        <div class="clock-label">লাইভ ঘড়ি</div>
+        <div class="poetic-clock" id="poeticClock" aria-label="Live time poem">
+          <span class="poetic-words" id="poeticWords"></span>
+        </div>
+        <div class="clock-mini mono" id="clock">--:--:-- --</div>
+        <div class="clock-label bn">যে সময় যাইতেছে তাহা আর ফিরিবিনা বৎস 🙂</div>
       </div>
     </header>
 
@@ -53,6 +56,15 @@
         </div>
         <div class="progress"><div class="progress-bar" id="focusProgressBar"></div></div>
         <div class="focus-progress-time mono" id="focusProgressTime"></div>
+      </div>
+
+      <!-- Next-day mini routine preview (shows after hours / weekend) -->
+      <div class="next-day-preview" id="nextDayPreview" hidden>
+        <div class="next-day-head">
+          <span class="next-day-icon">📅</span>
+          <span class="next-day-title bn" id="nextDayTitle">আগামী দিনের রুটিন</span>
+        </div>
+        <div class="next-day-list" id="nextDayList"></div>
       </div>
     </section>
 
