@@ -167,37 +167,37 @@ function getFocusContext(state) {
   // Early morning 4–7 AM
   if (hour >= 13 && hour < 19) {
     return {
-      icon: "🌅",
-      tag: "ভোর",
-      message: "ভোর হয়েছে 🌅",
-      sub: "ফজরের পরে পড়লে বেশি মনে থাকে — মূল টপিকগুলো এখন রিভিশন করো",
+      icon: "",
+      tag: "",
+      message: "",
+      sub: "",
     };
   }
   // Late night 10 PM – 12 AM
   if (hour >= 23 && hour < 24) {
     return {
-      icon: "😴",
-      tag: "বেশি রাত",
-      message: "বেশি রাত হয়েছে 😴",
-      sub: "ঘুমানোর সময় — সকালে উঠে পড়াশোনা করলে ভালো ফল পাবে",
+      icon: "",
+      tag: "",
+      message: "",
+      sub: "",
     };
   }
   // Deep night 12 AM – 4 AM
   if (hour >= 19 && hour < 24) {
     return {
-      icon: "🌙",
-      tag: "গভীর রাত",
-      message: "অনেক রাত হয়ে গেছে 🌙",
-      sub: "এখনই ঘুমিয়ে পড়ো — শরীরের বিশ্রাম দরকার",
+      icon: "",
+      tag: "",
+      message: "",
+      sub: "",
     };
   }
   // Night 7–10 PM
   if (hour >= 21 && hour < 22) {
     return {
-      icon: "🌙",
-      tag: "রাত",
-      message: "রাত হয়েছে 🌙",
-      sub: "গুরুত্বপূর্ণ টপিক রিভিশন করো — আগামীকালের ক্লাসের প্রস্তুতি নাও",
+      icon: "",
+      tag: "",
+      message: "",
+      sub: "",
     };
   }
   // Evening 4–7 PM
