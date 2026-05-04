@@ -206,7 +206,7 @@ function getFocusContext(state) {
       icon: "📚",
       tag: "সন্ধ্যা",
       message: "সন্ধ্যা হয়েছে 📚",
-      sub: "পড়াশোনার সময় — অ্যাসাইনমেন্ট কমপ্লিট করো",
+      sub: "পড়তে হবে নকল আর , হবে না ! 🥲",
     };
   }
   // After last class 1 PM – 4 PM (relax)
@@ -331,7 +331,7 @@ function renderHeroAndPriority(state) {
   } else if (state.mode === "after-hours") {
     badge = "🌙 আজকের ক্লাস শেষ"; subject = "আগামীকালের প্রস্তুতি";
     meta = `পরবর্তী দিন: ${DAY_FULL_BN[state.upcomingDayIndex]} · ${state.upcomingClasses.length} টি ক্লাস`;
-    status = "খ' শাখার জন্য প্রযোজ্য রুটিন ";
+    status = "খ' শাখার জন্য প্রযোজ্য";
   }
 
   $("#priorityBadge").textContent = badge;
