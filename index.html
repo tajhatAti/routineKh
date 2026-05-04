@@ -26,16 +26,35 @@
       <div class="hero-left">
         <p class="hero-eyebrow" id="dateLine">—</p>
         <h1 class="hero-title">
-          <span class="aurora">Routine Managementor </span><br />
-         ২য় পর্ব-> খ  শাখার জন্য প্রযোজ্য 
+          <span class="aurora">Smart Agriculture</span><br />
+          Student Portal
         </h1>
         <p class="hero-status" id="statusLine">লোড হচ্ছে…</p>
       </div>
       <div class="hero-right">
         <div class="clock" id="clock">--:--:--</div>
-        <div class="clock-label">যে সময় যাইতেছে , তাহা আর ফিরিবেনা বৎস 🙂</div>
+        <div class="clock-label">লাইভ ঘড়ি</div>
       </div>
     </header>
+
+    <!-- 🧠 SMART FOCUS MODE — Time-aware AI message -->
+    <section class="glass focus-card" id="focusCard">
+      <div class="focus-head">
+        <span class="focus-icon" id="focusIcon">🤖</span>
+        <span class="focus-tag" id="focusTag">SMART FOCUS</span>
+      </div>
+      <h2 class="focus-message bn" id="focusMessage">লোড হচ্ছে…</h2>
+      <p class="focus-sub bn" id="focusSub"></p>
+      <!-- Class progress bar (shows only during a class) -->
+      <div class="focus-progress-wrap" id="focusProgressWrap" hidden>
+        <div class="focus-progress-info">
+          <span class="bn" id="focusProgressLabel">ক্লাস অগ্রগতি</span>
+          <span class="mono" id="focusProgressPct">0%</span>
+        </div>
+        <div class="progress"><div class="progress-bar" id="focusProgressBar"></div></div>
+        <div class="focus-progress-time mono" id="focusProgressTime"></div>
+      </div>
+    </section>
 
     <!-- MAIN GRID -->
     <section class="grid">
@@ -65,23 +84,15 @@
         </article>
       </div>
 
-      <!-- ASIDE: ASSIGNMENTS -->
+      <!-- ASIDE: ASSIGNMENTS (READ-ONLY) -->
       <aside class="col-aside">
         <article class="glass">
           <div class="assign-head">
             <h3>📝 অ্যাসাইনমেন্ট</h3>
-            <button class="btn-icon" id="addBtn" title="যোগ করুন">+</button>
+            <a class="admin-link" href="admin.html" title="অ্যাডমিন">⚙️</a>
           </div>
-          <form id="addForm" class="add-form" hidden>
-            <input id="aTitle" placeholder="শিরোনাম" required />
-            <input id="aSubject" placeholder="বিষয়" required />
-            <input id="aDue" type="date" required />
-            <div class="form-row">
-              <button type="submit" class="btn primary">যোগ করুন</button>
-              <button type="button" class="btn ghost" id="cancelAdd">বাতিল</button>
-            </div>
-          </form>
           <ul id="assignList" class="assign-list"></ul>
+          <p class="assign-note bn">শুধুমাত্র অ্যাডমিন অ্যাসাইনমেন্ট যোগ/সম্পাদনা করতে পারবেন।</p>
         </article>
       </aside>
     </section>
