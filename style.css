@@ -196,8 +196,8 @@ body::before {
   transform: translateY(8px) skewX(-6deg);
   filter: blur(4px);
   animation:
-    word-in 0.55s cubic-bezier(0.2, 0.9, 0.3, 1) forwards,
-    word-shine 3.2s ease-in-out 0.55s infinite;
+    word-in 0.60s cubic-bezier(0.2, 0.9, 0.3, 1) forwards,
+    word-shine 3.2s ease-in-out 5s infinite;
   text-shadow: 0 0 22px hsl(187 100% 55% / 0.25);
 }
 @keyframes word-in {
@@ -211,8 +211,8 @@ body::before {
 }
 
 .clock-mini {
-  margin-top: 6px; font-size: 14px; color: var(--muted);
-  letter-spacing: 0.08em; opacity: 0.85;
+  margin-top: 8px; font-size: 18px; color: var(--muted);
+  letter-spacing: 0.08em; opacity: 0.90;
 }
 .clock-label {
   color: var(--muted); font-size: 11px; margin-top: 4px;
@@ -233,7 +233,7 @@ body::before {
   font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--muted); font-weight: 600;
 }
-.next-day-icon { font-size: 16px; }
+.next-day-icon { font-size: 18px; }
 .next-day-title { letter-spacing: 0; text-transform: none; font-size: 13px; color: var(--fg); }
 .next-day-list { display: flex; flex-direction: column; gap: 8px; }
 .next-day-row {
