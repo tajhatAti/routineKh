@@ -247,9 +247,54 @@ function renderFocus(state) {
   } else {
     wrap.hidden = true;
   }
+
+  // Next-day routine preview — shown after hours, weekend, or before classes
+  const preview = $("#nextDayPreview");
+  const showPreview =
+    state.mode === "after-hours" ||
+    state.mode === "weekend" ||
+    state.mode === "before-classes";
+  if (showPreview && state.upcomingClasses && state.upcomingClasses.length) {
+    preview.hidden = false;
+    const dayLabel = (state.mode === "before-classes")
+      ? `আজকের রুটিন · ${DAY_FULL_BN[state.dayIndex]}`
+      : `আগামী দিনের রুটিন · ${DAY_FULL_BN[state.upcomingDayIndex]}`;
+    $("#nextDayTitle").textContent = dayLabel;
+    $("#nextDayList").innerHTML = state.upcomingClasses.map(c => `
+      <div class="next-day-row">
+        <span class="nd-time">${c.startTime}–${c.endTime}</span>
+        <span class="nd-subject bn">${c.subject}</span>
+        <span class="nd-tag ${c.type || "theory"}">${c.type === "practical" ? "ব্যব" : "তত্ত্ব"}</span>
+      </div>`).join("");
+  } else {
+    preview.hidden = true;
+  }
 }
 
 /* -------------------- 5. RENDER: Hero + Priority -------------------- */
+const POETIC_WORDS = ["যে", "সময়", "যাইতেছে", "তাহা", "আর", "ফিরিবিনা", "বৎস", "🙂"];
+let poeticIdx = 0;
+
+function renderPoeticTick() {
+  const host = $("#poeticWords");
+  if (!host) return;
+  // Build full sentence with the current "highlighted" word re-animating
+  host.innerHTML = POETIC_WORDS.map((w, i) =>
+    `<span class="poetic-word" style="animation-delay:${i * 0.08}s">${w}</span>`
+  ).join("");
+  // Trigger a re-flash on one word every cycle for the "transition slide" feel
+  setTimeout(() => {
+    const spans = host.querySelectorAll(".poetic-word");
+    if (!spans.length) return;
+    const flash = spans[poeticIdx % spans.length];
+    flash.style.animation = "none";
+    // force reflow
+    void flash.offsetWidth;
+    flash.style.animation = "word-in 0.5s cubic-bezier(0.2,0.9,0.3,1) forwards, word-shine 1.6s ease-in-out forwards";
+    poeticIdx++;
+  }, POETIC_WORDS.length * 80 + 200);
+}
+
 function renderHeroAndPriority(state) {
   const d = state.now;
   let h = d.getHours();
@@ -434,6 +479,9 @@ function tick() {
 }
 tick();
 loadAssignments();
+renderPoeticTick();
 setInterval(tick, 1000);
 setInterval(renderAssignments, 60000);
-     
+// Re-trigger the word shimmer/transition every ~5.5s for the "চমকের স্লাইড" feel
+setInterval(renderPoeticTick, 5500);
+       
