@@ -24,10 +24,10 @@ const ROUTINE = {
     { subject: "রসায়ন-২",         startTime: "12:50", endTime: "13:35", room: "R-110", type: "theory" },
   ],
   2: [ // মঙ্গলবার
-    { subject: "কম্পিউটার অ্যাপ্লিকেশন",       startTime: "09:30", endTime: "10:15", room: "R-110", type: "practical" },
+    { subject: "কম্পিউটার অ্যাপ্লিকেশন",       startTime: "09:30", endTime: "10:15", room: "R-110", type: "theory" },
     { subject: "কৃষি তাত্ত্বিক (ব্যব)", startTime: "10:20", endTime: "11:05", room: "R-110", type: "practical" },
-    { subject: "জীব বিজ্ঞান-২ (ব্যব)",         startTime: "11:10", endTime: "11:55", room: "R-110", type: "practical" },
-    { subject: "রসায়ন (ব্যব)",                 startTime: "12:50", endTime: "13:35", room: "R-110", type: "practical" },
+    { subject: "জীব বিজ্ঞান-২ (ব্যব)",         startTime: "11:10", endTime: "11:55", room: "R-110", type: "theory" },
+    { subject: "রসায়ন (ব্যব)",                 startTime: "12:50", endTime: "13:35", room: "R-110", type: "theory" },
   ],
   3: [ // বুধবার
     { subject: "বাংলা-২",                 startTime: "10:20", endTime: "11:05", room: "R-110", type: "theory" },
