@@ -164,7 +164,7 @@ body::before {
 /* Poetic clock — word-by-word transition with shimmer */
 .poetic-clock {
   font-family: "Hind Siliguri", sans-serif;
-  font-size: 18px; font-weight: 600;
+  font-size: 36px; font-weight: 800;
   line-height: 1.5;
   min-height: 56px;
   display: flex; align-items: center;
