@@ -174,7 +174,7 @@ function getFocusContext(state) {
     };
   }
   // Late night 10 PM – 12 AM
-  if (hour >= 22 && hour < 24) {
+  if (hour >= 23 && hour < 24) {
     return {
       icon: "😴",
       tag: "বেশি রাত",
@@ -192,7 +192,7 @@ function getFocusContext(state) {
     };
   }
   // Night 7–10 PM
-  if (hour >= 19 && hour < 22) {
+  if (hour >= 21 && hour < 22) {
     return {
       icon: "🌙",
       tag: "রাত",
@@ -201,7 +201,7 @@ function getFocusContext(state) {
     };
   }
   // Evening 4–7 PM
-  if (hour >= 16 && hour < 19) {
+  if (hour >= 18 && hour < 20) {
     return {
       icon: "📚",
       tag: "সন্ধ্যা",
@@ -210,7 +210,7 @@ function getFocusContext(state) {
     };
   }
   // After last class 1 PM – 4 PM (relax)
-  if (hour >= 13 && hour < 16) {
+  if (hour >= 13 && hour < 17) {
     return {
       icon: "🙂",
       tag: "রিল্যাক্স",
@@ -272,7 +272,7 @@ function renderFocus(state) {
 }
 
 /* -------------------- 5. RENDER: Hero + Priority -------------------- */
-const POETIC_WORDS = ["যে", "সময়", "যাইতেছে", "তাহা", "আর", "ফিরিবিনা", "বৎস", ":)"];
+const POETIC_WORDS = ["যে", "সময়", "যাইতেছে", "তাহা", "আর", "ফিরিবিনা", "বৎস"];
 let poeticIdx = 0;
 
 function renderPoeticTick() {
